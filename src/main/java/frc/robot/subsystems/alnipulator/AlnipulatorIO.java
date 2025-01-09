@@ -21,12 +21,12 @@ public interface AlnipulatorIO {
         public double rightVoltage;
     }
 
-    public void spin(AngularVelocity vel);
-    public void spinOne(AngularVelocity vel);
+    public default void spin(AngularVelocity vel) {};
+    public default void spinOne(AngularVelocity vel) {};
 
-    public void cruise();
-    public void stop();
+    public default void cruise() {};
+    public default void stop() {};
 
-    public void updateInputs(AlnipulatorInputsAutoLogged inputs);
+    public default void updateInputs(AlnipulatorInputsAutoLogged inputs) {};
 
 }

@@ -13,9 +13,6 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -43,8 +40,6 @@ public final class Constants {
     public static final int leftMotorCAN = 0;
     public static final int rightMotorCAN = 1;
 
-    public static final AngularVelocity spinVelocity = RotationsPerSecond.of(10);
-
   }
-  
+
 }

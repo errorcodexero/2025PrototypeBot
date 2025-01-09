@@ -131,7 +131,7 @@ public class Drive extends SubsystemBase {
         this::getChassisSpeeds,
         this::runVelocity,
         new PPHolonomicDriveController(
-            new PIDConstants(5.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
+            new PIDConstants(8.0, 0.0, 0.0), new PIDConstants(5.0, 0.0, 0.0)),
         PP_CONFIG,
         () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
         this);
@@ -276,6 +276,16 @@ public class Drive extends SubsystemBase {
   /** Returns a command to run a dynamic test in the specified direction. */
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return run(() -> runCharacterization(0.0)).withTimeout(1.0).andThen(sysId.dynamic(direction));
+  }
+
+  public Command resetGyroCmd() {
+    return runOnce(() -> {
+      setPose(new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    }).ignoringDisable(true);
+  }
+
+  public Command stopWithXCmd() {
+    return runOnce(() -> stopWithX());
   }
 
   /** Returns the module states (turn angles and drive velocities) for all of the modules. */
