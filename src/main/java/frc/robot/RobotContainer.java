@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.drive.Drive;
@@ -130,6 +131,19 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
+    // Slow Mode, during left bumper
+    controller.leftBumper().whileTrue(
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -controller.getLeftY() * DriveConstants.slowModeMultiplier,
+            () -> -controller.getLeftX() * DriveConstants.slowModeMultiplier,
+            () -> -controller.getRightX() * DriveConstants.slowModeMultiplier
+        )
+    );
+
+    // Switch to X pattern / brake while X button is pressed
+    controller.x().whileTrue(drive.stopWithXCmd());
+
     // Robot Relative
     controller.povUp().whileTrue(Commands.run(() -> {
         drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(1), MetersPerSecond.of(0), RadiansPerSecond.zero()));
@@ -137,9 +151,6 @@ public class RobotContainer {
 
     // Reset gyro to 0° when Y & B button is pressed
     controller.y().and(controller.b()).onTrue(drive.resetGyroCmd());
-
-    // Switch to X pattern when X button is pressed
-    controller.x().onTrue(drive.stopWithXCmd());
 
     // Coral Intake Prototyping Controls
     // Add controls here

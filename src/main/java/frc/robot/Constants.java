@@ -35,6 +35,12 @@ public final class Constants {
     REPLAY
   }
 
+  public static class DriveConstants {
+
+    public static final double slowModeMultiplier = 0.25;
+
+  }
+
   public static class AlnipulatorConstants {
 
     public static final int leftMotorCAN = 1;
