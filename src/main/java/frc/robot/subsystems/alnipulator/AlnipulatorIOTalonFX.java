@@ -36,8 +36,17 @@ public class AlnipulatorIOTalonFX implements AlnipulatorIO {
 
     @Override
     public void updateInputs(AlnipulatorInputsAutoLogged inputs) {
-        // TODO Auto-generated method stub
-        
+        inputs.leftAcceleration = leftMotor.getAcceleration().getValueAsDouble();
+        inputs.leftCurrent = leftMotor.getStatorCurrent().getValueAsDouble();
+        inputs.leftPosition = leftMotor.getPosition().getValueAsDouble();
+        inputs.leftVelocity = leftMotor.getPosition().getValueAsDouble();
+        inputs.leftVoltage = leftMotor.getMotorVoltage().getValueAsDouble();
+
+        inputs.rightAcceleration = rightMotor.getAcceleration().getValueAsDouble();
+        inputs.rightCurrent = rightMotor.getStatorCurrent().getValueAsDouble();
+        inputs.rightPosition = rightMotor.getPosition().getValueAsDouble();
+        inputs.rightVelocity = rightMotor.getPosition().getValueAsDouble();
+        inputs.rightVoltage = rightMotor.getMotorVoltage().getValueAsDouble();
     }
     
 }

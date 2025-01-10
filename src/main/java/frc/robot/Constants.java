@@ -37,8 +37,15 @@ public final class Constants {
 
   public static class AlnipulatorConstants {
 
-    public static final int leftMotorCAN = 0;
-    public static final int rightMotorCAN = 1;
+    public static final int leftMotorCAN = 1;
+    public static final int rightMotorCAN = 2;
+
+  }
+
+  public static class CoralIntakeConstants {
+
+    public static final int hingeMotorCAN = 3;
+    public static final int rollerMotorCAN = 4;
 
   }
 

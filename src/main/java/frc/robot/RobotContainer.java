@@ -13,14 +13,19 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
@@ -44,7 +49,6 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Alnipulator alnipulator;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -65,8 +69,6 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        alnipulator = new Alnipulator(new AlnipulatorIOTalonFX());
-
         break;
 
       case SIM:
@@ -79,8 +81,6 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
 
-        alnipulator = new Alnipulator(new AlnipulatorIOTalonFX());
-
         break;
 
       default:
@@ -92,8 +92,6 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
-
-        alnipulator = new Alnipulator(new AlnipulatorIO() {});
 
         break;
     }
@@ -136,13 +134,10 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
 
-    // Lock to 0° when A button is held
-    controller.a().whileTrue(
-        DriveCommands.joystickDriveAtAngle(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> new Rotation2d()));
+    // Robot Relative
+    controller.povUp().whileTrue(Commands.run(() -> {
+        drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(1), MetersPerSecond.of(0), RadiansPerSecond.zero()));
+    }, drive));
 
     // Reset gyro to 0° when Y & B button is pressed
     controller.y().and(controller.b()).onTrue(drive.resetGyroCmd());
@@ -150,12 +145,8 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(drive.stopWithXCmd());
 
-    // Alnipulator Prototyping Controls
-    controller.rightTrigger().whileTrue(alnipulator.intakeDouble());
-    controller.rightBumper().whileTrue(alnipulator.intakeSingle());
-
-    controller.leftTrigger().whileTrue(alnipulator.outtake());
-    controller.leftBumper().whileTrue(alnipulator.outtakeSingle());
+    // Coral Intake Prototyping Controls
+    // Add controls here
     
   }
 
