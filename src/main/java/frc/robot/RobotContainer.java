@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.FeetPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
@@ -144,19 +145,19 @@ public class RobotContainer {
 
     // Robot Relative
     controller.povUp().whileTrue(
-        drive.runVelocityCmd(MetersPerSecond.of(1), MetersPerSecond.of(0), RadiansPerSecond.zero())
+        drive.runVelocityCmd(FeetPerSecond.one(), MetersPerSecond.of(0), RadiansPerSecond.zero())
     );
 
     controller.povDown().whileTrue(
-        drive.runVelocityCmd(MetersPerSecond.of(-1), MetersPerSecond.of(0), RadiansPerSecond.zero())
+        drive.runVelocityCmd(FeetPerSecond.one().unaryMinus(), MetersPerSecond.of(0), RadiansPerSecond.zero())
     );
 
     controller.povLeft().whileTrue(
-        drive.runVelocityCmd(MetersPerSecond.zero(), MetersPerSecond.of(1), RadiansPerSecond.zero())
+        drive.runVelocityCmd(MetersPerSecond.zero(), FeetPerSecond.one(), RadiansPerSecond.zero())
     );
 
     controller.povRight().whileTrue(
-        drive.runVelocityCmd(MetersPerSecond.zero(), MetersPerSecond.of(-1), RadiansPerSecond.zero())
+        drive.runVelocityCmd(MetersPerSecond.zero(), FeetPerSecond.one().unaryMinus(), RadiansPerSecond.zero())
     );
 
     // Reset gyro to 0° when Y & B button is pressed

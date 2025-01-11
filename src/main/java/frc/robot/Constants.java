@@ -37,7 +37,7 @@ public final class Constants {
 
   public static class DriveConstants {
 
-    public static final double slowModeMultiplier = 0.25;
+    public static final double slowModeMultiplier = 0.4;
 
   }
 
