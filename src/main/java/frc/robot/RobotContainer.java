@@ -149,6 +149,18 @@ public class RobotContainer {
         drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(1), MetersPerSecond.of(0), RadiansPerSecond.zero()));
     }, drive));
 
+    controller.povDown().whileTrue(Commands.run(() -> {
+      drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(-1), MetersPerSecond.of(0), RadiansPerSecond.zero()));
+    }, drive));
+
+    controller.povLeft().whileTrue(Commands.run(() -> {
+      drive.runVelocity(new ChassisSpeeds(MetersPerSecond.zero(), MetersPerSecond.of(1), RadiansPerSecond.zero()));
+    }, drive));
+
+    controller.povRight().whileTrue(Commands.run(() -> {
+      drive.runVelocity(new ChassisSpeeds(MetersPerSecond.zero(), MetersPerSecond.of(-1), RadiansPerSecond.zero()));
+    }, drive));
+
     // Reset gyro to 0° when Y & B button is pressed
     controller.y().and(controller.b()).onTrue(drive.resetGyroCmd());
 
