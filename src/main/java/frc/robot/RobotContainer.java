@@ -20,11 +20,9 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DriveConstants;
@@ -145,21 +143,21 @@ public class RobotContainer {
     controller.x().whileTrue(drive.stopWithXCmd());
 
     // Robot Relative
-    controller.povUp().whileTrue(Commands.run(() -> {
-        drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(1), MetersPerSecond.of(0), RadiansPerSecond.zero()));
-    }, drive));
+    controller.povUp().whileTrue(
+        drive.runVelocityCmd(MetersPerSecond.of(1), MetersPerSecond.of(0), RadiansPerSecond.zero())
+    );
 
-    controller.povDown().whileTrue(Commands.run(() -> {
-      drive.runVelocity(new ChassisSpeeds(MetersPerSecond.of(-1), MetersPerSecond.of(0), RadiansPerSecond.zero()));
-    }, drive));
+    controller.povDown().whileTrue(
+        drive.runVelocityCmd(MetersPerSecond.of(-1), MetersPerSecond.of(0), RadiansPerSecond.zero())
+    );
 
-    controller.povLeft().whileTrue(Commands.run(() -> {
-      drive.runVelocity(new ChassisSpeeds(MetersPerSecond.zero(), MetersPerSecond.of(1), RadiansPerSecond.zero()));
-    }, drive));
+    controller.povLeft().whileTrue(
+        drive.runVelocityCmd(MetersPerSecond.zero(), MetersPerSecond.of(1), RadiansPerSecond.zero())
+    );
 
-    controller.povRight().whileTrue(Commands.run(() -> {
-      drive.runVelocity(new ChassisSpeeds(MetersPerSecond.zero(), MetersPerSecond.of(-1), RadiansPerSecond.zero()));
-    }, drive));
+    controller.povRight().whileTrue(
+        drive.runVelocityCmd(MetersPerSecond.zero(), MetersPerSecond.of(-1), RadiansPerSecond.zero())
+    );
 
     // Reset gyro to 0° when Y & B button is pressed
     controller.y().and(controller.b()).onTrue(drive.resetGyroCmd());

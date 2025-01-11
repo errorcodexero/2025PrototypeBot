@@ -39,6 +39,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -241,6 +243,17 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
   }
 
+  /**
+   * Runs the drive at the desired velocities.
+   * 
+   * @param x X Velocity
+   * @param y Y Velocity
+   * @param omega Angular Velocity
+   */
+  public void runVelocity(LinearVelocity x, LinearVelocity y, AngularVelocity omega) {
+    runVelocity(new ChassisSpeeds(x, y, omega));
+  }
+
   /** Runs the drive in a straight line with the specified drive output. */
   public void runCharacterization(double output) {
     for (int i = 0; i < 4; i++) {
@@ -286,6 +299,18 @@ public class Drive extends SubsystemBase {
 
   public Command stopWithXCmd() {
     return runOnce(() -> stopWithX());
+  }
+
+  public Command runVelocityCmd(ChassisSpeeds speeds) {
+    return run(() -> {
+      runVelocity(speeds);
+    });
+  }
+
+  public Command runVelocityCmd(LinearVelocity x, LinearVelocity y, AngularVelocity omega) {
+    return run(() -> {
+      runVelocity(x, y, omega);
+    });
   }
 
   /** Returns the module states (turn angles and drive velocities) for all of the modules. */
