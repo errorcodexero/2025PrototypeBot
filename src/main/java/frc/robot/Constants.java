@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -52,6 +54,12 @@ public final class Constants {
 
     public static final int hingeMotorCAN = 3;
     public static final int rollerMotorCAN = 4;
+
+  }
+
+  public static class FieldConstants {
+
+    public static final AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   }
 
