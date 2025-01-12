@@ -29,7 +29,7 @@ public class CoralIntake extends SubsystemBase {
     }
 
     public Command intake() {
-        return runEnd(() -> {
+        return startEnd(() -> {
             io_.runHingePosition(Degrees.of(hingePosition_.get()));
             io_.runRollerVelocity(RotationsPerSecond.of(rollerRPS_.get()));
         }, () -> {
