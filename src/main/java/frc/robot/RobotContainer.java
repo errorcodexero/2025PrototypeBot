@@ -29,6 +29,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.DriveCommands;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.coralintake.CoralIntake;
+import frc.robot.subsystems.coralintake.CoralIntakeIO;
+import frc.robot.subsystems.coralintake.CoralIntakeIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -44,7 +47,8 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
  */
 public class RobotContainer {
   // Subsystems
-  private final Drive drive;
+  private final Drive drive_;
+  private final CoralIntake coralIntake_;
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -57,7 +61,7 @@ public class RobotContainer {
     switch (Constants.currentMode) {
       case REAL:
         // Real robot, instantiate hardware IO implementations
-        drive =
+        drive_ =
             new Drive(
                 new GyroIOPigeon2(),
                 new ModuleIOTalonFX(TunerConstants.FrontLeft),
@@ -65,11 +69,13 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
+        coralIntake_ = new CoralIntake(new CoralIntakeIOTalonFX());
+
         break;
 
       case SIM:
         // Sim robot, instantiate physics sim IO implementations
-        drive =
+        drive_ =
             new Drive(
                 new GyroIO() {},
                 new ModuleIOSim(TunerConstants.FrontLeft),
@@ -77,17 +83,21 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
 
+        coralIntake_ = new CoralIntake(new CoralIntakeIOTalonFX()); // TalonFX sim for simplicity
+
         break;
 
       default:
         // Replayed robot, disable IO implementations
-        drive =
+        drive_ =
             new Drive(
                 new GyroIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+
+        coralIntake_ = new CoralIntake(new CoralIntakeIO() {});
 
         break;
     }
@@ -97,19 +107,19 @@ public class RobotContainer {
 
     // Set up SysId routines
     autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive_));
     autoChooser.addOption(
-        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+        "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive_));
     autoChooser.addOption(
         "Drive SysId (Quasistatic Forward)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        drive_.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
         "Drive SysId (Quasistatic Reverse)",
-        drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        drive_.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Forward)", drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        "Drive SysId (Dynamic Forward)", drive_.sysIdDynamic(SysIdRoutine.Direction.kForward));
     autoChooser.addOption(
-        "Drive SysId (Dynamic Reverse)", drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        "Drive SysId (Dynamic Reverse)", drive_.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -123,9 +133,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
-    drive.setDefaultCommand(
+    drive_.setDefaultCommand(
         DriveCommands.joystickDrive(
-            drive,
+            drive_,
             () -> -controller.getLeftY(),
             () -> -controller.getLeftX(),
             () -> -controller.getRightX()));
@@ -133,7 +143,7 @@ public class RobotContainer {
     // Slow Mode, during left bumper
     controller.leftBumper().whileTrue(
         DriveCommands.joystickDrive(
-            drive,
+            drive_,
             () -> -controller.getLeftY() * DriveConstants.slowModeMultiplier,
             () -> -controller.getLeftX() * DriveConstants.slowModeMultiplier,
             () -> -controller.getRightX() * DriveConstants.slowModeMultiplier
@@ -141,30 +151,30 @@ public class RobotContainer {
     );
 
     // Switch to X pattern / brake while X button is pressed
-    controller.x().whileTrue(drive.stopWithXCmd());
+    controller.x().whileTrue(drive_.stopWithXCmd());
 
     // Robot Relative
     controller.povUp().whileTrue(
-        drive.runVelocityCmd(FeetPerSecond.one(), MetersPerSecond.of(0), RadiansPerSecond.zero())
+        drive_.runVelocityCmd(FeetPerSecond.one(), MetersPerSecond.of(0), RadiansPerSecond.zero())
     );
 
     controller.povDown().whileTrue(
-        drive.runVelocityCmd(FeetPerSecond.one().unaryMinus(), MetersPerSecond.of(0), RadiansPerSecond.zero())
+        drive_.runVelocityCmd(FeetPerSecond.one().unaryMinus(), MetersPerSecond.of(0), RadiansPerSecond.zero())
     );
 
     controller.povLeft().whileTrue(
-        drive.runVelocityCmd(MetersPerSecond.zero(), FeetPerSecond.one(), RadiansPerSecond.zero())
+        drive_.runVelocityCmd(MetersPerSecond.zero(), FeetPerSecond.one(), RadiansPerSecond.zero())
     );
 
     controller.povRight().whileTrue(
-        drive.runVelocityCmd(MetersPerSecond.zero(), FeetPerSecond.one().unaryMinus(), RadiansPerSecond.zero())
+        drive_.runVelocityCmd(MetersPerSecond.zero(), FeetPerSecond.one().unaryMinus(), RadiansPerSecond.zero())
     );
 
     // Reset gyro to 0° when Y & B button is pressed
-    controller.y().and(controller.b()).onTrue(drive.resetGyroCmd());
+    controller.y().and(controller.b()).onTrue(drive_.resetGyroCmd());
 
     // Coral Intake Prototyping Controls
-    // Add controls here
+    controller.rightTrigger().whileTrue(coralIntake_.intake());
     
   }
 
