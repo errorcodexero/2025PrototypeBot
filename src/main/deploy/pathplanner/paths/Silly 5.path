@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.7732500000000004,
+        "y": 5.2925
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.3773424184190004,
+        "y": 5.617197066763801
+      },
+      "isLocked": false,
+      "linkedName": "Silly 2 & 4"
+    },
+    {
+      "anchor": {
+        "x": 1.60875,
+        "y": 7.184
+      },
+      "prevControl": {
+        "x": 2.1179909548548226,
+        "y": 6.720934981864739
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Silly 5"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -54.46232220802562
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -61.82140989004085
+  },
+  "useDefaultConstraints": true
+}

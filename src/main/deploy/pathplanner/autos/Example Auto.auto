@@ -7,7 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "Silly Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Silly 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Silly 4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Silly 5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Silly End"
           }
         }
       ]
